@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8  # Adjust the Python version as needed
+    commands:
+      - sudo apt update
+      - sudo apt install python3 -y
+      - sudo apt install python3-pip -y
+  pre_build:
+    commands:
+      - sudo pip3 install detect-secrets
+
+artifacts:
+  files: '**/*'
