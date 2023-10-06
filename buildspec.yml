@@ -3,21 +3,11 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - sudo apt update
-      - sudo apt install python3
-      - sudo apt install python3 -y
-      - sudo apt install python3-pip -y
-      - sudo pip3 install detect-secrets
-  build:
-    commands:
-      - sudo rm gitsecret_report.json || true #Removes if already report.json file exists
-      - sudo chmod +x -R ${env.WORKSPACE} #Giving Executable permisiion for the workpace
-      - sudo ls -la
-      - detect-secrets -C . scan > gitsecret_report.json #Scanning for the secrets and storing reportin *.json file
-      - cat gitsecret_report.json || true 
+      - sudo apt update 
+      - sudo apt install python3 -y   #Installing Python
+      - sudo apt install python3-pip -y #Installing pip dependency
+      - sudo pip3 install detect-secrets #Installing detect-secrets using pip
   post_build:
     commands:
       - echo "installed detect-secrets"
       - detect-secrets --version
-  artifacts:
-    files: gitsecret_report.json
