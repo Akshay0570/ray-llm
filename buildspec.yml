@@ -1,26 +1,5 @@
 version: 0.2
 
- 
-
-#env:
-  #variables:
-     # key: "value"
-     # key: "value"
-  #parameter-store:
-     # key: "value"
-     # key: "value"
-  #secrets-manager:
-     # key: secret-id:json-key:version-stage:version-id
-     # key: secret-id:json-key:version-stage:version-id
-  #exported-variables:
-     # - variable
-     # - variable
-  #git-credential-helper: yes
-#batch:
-  #fast-fail: true
-  #build-list:
-  #build-matrix:
-  #build-graph:
 phases:
   install:
     #runtime-versions:
@@ -33,35 +12,21 @@ phases:
       - sudo pip3 install detect-secrets #Installing detect-secrets using pip
     finally:
       - echo This is secret-scan stage using detect-secrets tool
-      - echo This always runs even if the update or install command fails 
+      - echo This always runs even if the update or install command fails
   pre_build:
     commands:
-       - echo Don't have pre-build for this scan
-      # - command
+      - echo "installed detect-secrets"
+      - detect-secrets --version
   build:
     commands:
-      - git clone --branch master https://Mukeshit91@bitbucket.org/Mukeshit91/docker-vulnerable-dvwa.git
+      #- git clone --branch master https://Mukeshit91@bitbucket.org/Mukeshit91/docker-vulnerable-dvwa.git
       - echo "Perform build steps here"
       - sudo rm gitsecret_report.json || true
-      #- detect-secrets scan --all-files > .secrets.baseline
+      - detect-secrets scan --all-files > .secrets.baseline
       - detect-secrets -C . scan > gitsecret_report.json
       - cat gitsecret_report.json || true
   post_build:
     commands:
       - echo Entered the post_build phase...
       - echo Build completed on `date`
-#reports:
-  #report-name-or-arn:
-    #files:
-      # - location
-      # - location
-    #base-directory: location
-    #discard-paths: yes
-    #file-format: JunitXml | CucumberJson
-#artifacts:
-  #files:
-    # - location
-    # - location
-  #name: $(date +%Y-%m-%d)
-  #discard-paths: yes
-  #base-directory: location
+  
