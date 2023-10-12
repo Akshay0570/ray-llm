@@ -1,27 +1,22 @@
-version: 0.2
+version: 0.2 
 
 phases:
   install:
-    #runtime-versions:
-      # name: version
-      # name: version
+    runtime-versions:
+      python: 3.11
     commands:
-      - sudo apt update 
-      - sudo apt install python3 -y   #Installing Python
-      - sudo apt install python3-pip -y #Installing pip dependency
-      - sudo pip3 install detect-secrets #Installing detect-secrets using pip
-    finally:
-      - echo This is secret-scan stage using detect-secrets tool
-      - echo This always runs even if the update or install command fails
+      - apt update
+      - apt install python3 -y
+      - apt install python3-pip -y
+      - pip3 install detect-secrets
   pre_build:
     commands:
-      - echo "installed detect-secrets"
+      - echo "Installed detect-secrets"
       - detect-secrets --version
   build:
     commands:
-      #- git clone --branch master https://Mukeshit91@bitbucket.org/Mukeshit91/docker-vulnerable-dvwa.git
       - echo "Perform build steps here"
-      - sudo rm gitsecret_report.json || true
+      - rm gitsecret_report.json || true
       - detect-secrets scan --all-files > .secrets.baseline
       - detect-secrets -C . scan > gitsecret_report.json
       - cat gitsecret_report.json || true
@@ -29,4 +24,5 @@ phases:
     commands:
       - echo Entered the post_build phase...
       - echo Build completed on `date`
-  
+artifacts:
+  files: gitsecret_report.json
